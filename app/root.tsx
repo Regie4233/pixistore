@@ -52,6 +52,24 @@ export function links() {
       href: 'https://shop.app',
     },
     {rel: 'icon', type: 'image/svg+xml', href: favicon},
+    {
+      rel: 'preconnect',
+      href: 'https://fonts.googleapis.com',
+      referrerPolicy: 'origin',
+      crossOrigin: 'anonymous',
+    },
+    {
+      rel: 'preconnect',
+      href: 'https://fonts.gstatic.com',
+      crossOrigin: 'anonymous',
+      referrerPolicy: 'origin',
+    },
+    {
+      href: 'https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&display=swap',
+      rel: 'stylesheet',
+      crossOrigin: 'anonymous',
+      referrerPolicy: 'origin',
+    },
   ];
 }
 

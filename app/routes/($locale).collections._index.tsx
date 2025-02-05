@@ -44,7 +44,7 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
 
 export default function Collections() {
   const {collections} = useLoaderData<typeof loader>();
-
+  console.log("!!")
   return (
     <div className="collections">
       <h1>Collections</h1>
@@ -71,6 +71,7 @@ function CollectionItem({
   collection: CollectionFragment;
   index: number;
 }) {
+ 
   return (
     <Link
       className="collection-item"

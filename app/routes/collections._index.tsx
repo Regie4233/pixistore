@@ -130,3 +130,4 @@ const COLLECTIONS_QUERY = `#graphql
     }
   }
 ` as const;
+
