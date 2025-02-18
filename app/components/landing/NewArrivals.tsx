@@ -14,11 +14,11 @@ export default function NewArrivals({ productData }: { productData: any }) {
   console.log(productData)
 
   return (
-    <main className='bg-[#FCE3DF] m-8'>
+    <main className='bg-[#FCE3DF] m-2 rounded-4xl'>
       <ul className='flex flex-row items-center gap-4 m-12 p-4'>
         <li className='flex flex-col items-center gap-4 mystery-quest-regular'>
           <Image src='/assets/newarr.png' alt='new arrivals image' width='600px'/>
-          <a href='/' className=' text-xl bg-[#FFF2CC] px-14 py-2'>Browse</a>
+          <a href='/' className=' text-xl bg-[hsl(45,100%,85%)] px-14 py-2'>Browse</a>
         </li>
         {
           productData.map((product: any) => {

@@ -288,6 +288,34 @@ export type FooterQuery = {
   >;
 };
 
+export type GetAllCollectionsQueryVariables = StorefrontAPI.Exact<{
+  first: StorefrontAPI.Scalars['Int']['input'];
+  after?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['String']['input']>;
+  country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
+  language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
+}>;
+
+export type GetAllCollectionsQuery = {
+  collections: {
+    edges: Array<
+      Pick<StorefrontAPI.CollectionEdge, 'cursor'> & {
+        node: Pick<
+          StorefrontAPI.Collection,
+          'id' | 'title' | 'handle' | 'description'
+        > & {
+          image?: StorefrontAPI.Maybe<
+            Pick<
+              StorefrontAPI.Image,
+              'originalSrc' | 'altText' | 'width' | 'height'
+            >
+          >;
+        };
+      }
+    >;
+    pageInfo: Pick<StorefrontAPI.PageInfo, 'hasNextPage' | 'endCursor'>;
+  };
+};
+
 export type FeaturedCollectionFragment = Pick<
   StorefrontAPI.Collection,
   'id' | 'title' | 'handle'
@@ -365,6 +393,34 @@ export type GetAllProductsQueryVariables = StorefrontAPI.Exact<{
 }>;
 
 export type GetAllProductsQuery = {
+  products: {
+    edges: Array<
+      Pick<StorefrontAPI.ProductEdge, 'cursor'> & {
+        node: Pick<
+          StorefrontAPI.Product,
+          'id' | 'title' | 'handle' | 'description'
+        > & {
+          priceRange: {
+            minVariantPrice: Pick<
+              StorefrontAPI.MoneyV2,
+              'amount' | 'currencyCode'
+            >;
+          };
+          images: {nodes: Array<Pick<StorefrontAPI.Image, 'url' | 'altText'>>};
+        };
+      }
+    >;
+    pageInfo: Pick<StorefrontAPI.PageInfo, 'hasNextPage' | 'endCursor'>;
+  };
+};
+
+export type RecentlyAddedProductsQueryVariables = StorefrontAPI.Exact<{
+  first: StorefrontAPI.Scalars['Int']['input'];
+  country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
+  language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
+}>;
+
+export type RecentlyAddedProductsQuery = {
   products: {
     edges: Array<
       Pick<StorefrontAPI.ProductEdge, 'cursor'> & {
@@ -1200,6 +1256,10 @@ interface GeneratedQueryTypes {
     return: FooterQuery;
     variables: FooterQueryVariables;
   };
+  '#graphql\nquery GetAllCollections($first: Int!, $after: String, $country: CountryCode, $language: LanguageCode) @inContext(country: $country, language: $language) {\n  collections(first: $first, after: $after) {\n    edges {\n      node {\n        id\n        title\n        handle\n        description\n        image {\n          originalSrc # Or url if you prefer\n          altText\n          width\n          height\n        }\n        # Add other collection fields you need here\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n': {
+    return: GetAllCollectionsQuery;
+    variables: GetAllCollectionsQueryVariables;
+  };
   '#graphql\n  fragment FeaturedCollection on Collection {\n    id\n    title\n    image {\n      id\n      url\n      altText\n      width\n      height\n    }\n    handle\n  }\n  query FeaturedCollection($country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    collections(first: 1, sortKey: UPDATED_AT, reverse: true) {\n      nodes {\n        ...FeaturedCollection\n      }\n    }\n  }\n': {
     return: FeaturedCollectionQuery;
     variables: FeaturedCollectionQueryVariables;
@@ -1211,6 +1271,10 @@ interface GeneratedQueryTypes {
   '#graphql\n  query GetAllProducts($first: Int!, $after: String) {\n    products(first: $first, after: $after) {\n      edges {\n        node {\n          id\n          title\n          handle\n          description\n          priceRange {\n            minVariantPrice {\n              amount\n              currencyCode\n            }\n          }\n          images(first: 1) {\n            nodes {\n              url\n              altText\n            }\n          }\n        }\n        cursor\n      }\n      pageInfo {\n        hasNextPage\n        endCursor \n      }\n    }\n  }\n': {
     return: GetAllProductsQuery;
     variables: GetAllProductsQueryVariables;
+  };
+  '#graphql\nquery RecentlyAddedProducts($first: Int!, $country: CountryCode, $language: LanguageCode) @inContext(country: $country, language: $language) {\n  products(first: $first, sortKey: CREATED_AT, reverse: true) {\n    edges {\n      node {\n        id\n        title\n        handle\n        description\n        priceRange {\n          minVariantPrice {\n            amount\n            currencyCode\n          }\n        }\n        images(first: 1) {\n          nodes {\n            url\n            altText\n          }\n        }\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n': {
+    return: RecentlyAddedProductsQuery;
+    variables: RecentlyAddedProductsQueryVariables;
   };
   '#graphql\n  query Article(\n    $articleHandle: String!\n    $blogHandle: String!\n    $country: CountryCode\n    $language: LanguageCode\n  ) @inContext(language: $language, country: $country) {\n    blog(handle: $blogHandle) {\n      articleByHandle(handle: $articleHandle) {\n        title\n        contentHtml\n        publishedAt\n        author: authorV2 {\n          name\n        }\n        image {\n          id\n          altText\n          url\n          width\n          height\n        }\n        seo {\n          description\n          title\n        }\n      }\n    }\n  }\n': {
     return: ArticleQuery;

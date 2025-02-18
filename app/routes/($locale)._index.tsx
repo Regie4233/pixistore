@@ -10,6 +10,7 @@ import { HeroSection } from '~/components/landing/HeroSection';
 import NewArrivals from '~/components/landing/NewArrivals';
 import HotItems from '~/components/landing/HotItems';
 import AllCollections from '~/components/landing/AllCollections';
+import { ShowCollection } from '~/components/shop/ShowCollection';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Hydrogen | Home' }];
@@ -33,9 +34,14 @@ export async function loader(args: LoaderFunctionArgs) {
  */
 async function loadCriticalData({ context }: LoaderFunctionArgs) {
   const [{ collections }, data] = await Promise.all([
-    context.storefront.query(FEATURED_COLLECTION_QUERY),
-    // Add other queries here, so that they are loaded in parallel
+    context.storefront.query(ALL_COLLECTIONS_QUERY,{
+      variables: {
+        first: 20,
+        after: null
+      }
+    }),
 
+    // Add other queries here, so that they are loaded in parallel
     context.storefront
       .query(ALL_PRODUCTS_QUERY, {
         variables: {
@@ -57,7 +63,7 @@ async function loadCriticalData({ context }: LoaderFunctionArgs) {
   //     return null;
   //   });
   return {
-    featuredCollection: collections.nodes[0],
+    featuredCollection: collections,
     allProducts: data
   };
 }
@@ -79,7 +85,6 @@ function loadDeferredData({ context }: LoaderFunctionArgs) {
     .query(GET_RECENT_PRODUCTS, {
       variables: {
         first: 3,
-        after: null
       }
     })
     .catch((error) => {
@@ -106,7 +111,8 @@ export default function Homepage() {
       <NewArrivals productData={allProducts.products.edges} />
       {/* <RecommendedProducts products={data.recommendedProducts} /> */}
       <HotItems productData={allProducts.products.edges} />
-      <AllCollections productData={null}/>
+      {/* <FeaturedCollection collection={featuredCollection} /> */}
+      <AllCollections collectionData={featuredCollection} />
     </div>
   );
 }
@@ -117,6 +123,7 @@ function FeaturedCollection({
   collection: FeaturedCollectionFragment;
 }) {
   if (!collection) return null;
+  console.log(collection);
   const image = collection?.image;
   return (
     <Link
@@ -172,6 +179,34 @@ function RecommendedProducts({
     </div>
   );
 }
+
+const ALL_COLLECTIONS_QUERY = `#graphql
+query GetAllCollections($first: Int!, $after: String, $country: CountryCode, $language: LanguageCode) @inContext(country: $country, language: $language) {
+  collections(first: $first, after: $after) {
+    edges {
+      node {
+        id
+        title
+        handle
+        description
+        image {
+          originalSrc # Or url if you prefer
+          altText
+          width
+          height
+        }
+        # Add other collection fields you need here
+      }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+`
+
 
 const FEATURED_COLLECTION_QUERY = `#graphql
   fragment FeaturedCollection on Collection {

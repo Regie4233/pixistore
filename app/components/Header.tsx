@@ -26,15 +26,15 @@ export function Header({
 }: HeaderProps) {
   const { shop, menu } = header;
   return (
-    <header className="py-4 mystery-quest-regular mx-8">
-      <nav className=" px-4 py-2 rounded-3xl m-auto bg-[#FCE3DF] flex flex-row xjustify-between items-center gap-2">
+    <header className="py-2 mystery-quest-regular mx-8">
+      <nav className="m-auto flex flex-row xjustify-between items-center gap-2">
         {/* <HeaderMenu
           menu={menu}
           viewport="desktop"
           primaryDomainUrl={header.shop.primaryDomain.url}
           publicStoreDomain={publicStoreDomain}
         /> */}
-        <ul className='flex flex-row gap-8'>
+        {/* <ul className='flex flex-row gap-8'>
           <li>
             <NavLink prefetch="intent" to="/" style={activeLinkStyle} className={''} end>
               Home
@@ -59,7 +59,7 @@ export function Header({
               Hot Items
             </NavLink>
           </li>
-        </ul>
+        </ul> */}
         {/* <ShowCollection /> */}
         <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
       </nav>
